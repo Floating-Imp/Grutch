@@ -12,9 +12,13 @@ public class Connection
 	private static ServerSocket server;
 	
 	public static InetAddress address;
+	public static int port;
+	
 	
 	static
 	{
+		port = 1001;
+		
 		try	
 		{
 			address = InetAddress.getByName("");
@@ -29,6 +33,8 @@ public class Connection
 	
 	public static void sendData(Data data)
 	{
-		DatagramPacket datagram = new DatagramPacket();
+		DatagramPacket datagram = new DatagramPacket(data.getData(), port, null);
+		
+		socket.send(datagram);
 	}
 }
