@@ -5,6 +5,17 @@ public class Main
 {
 	public static void main(String[] args)
 	{
-		Window window = new Window();
+		Window.show();
+		
+		try
+		{
+			Thread.sleep(1000);
+		}
+		catch (InterruptedException ie)
+		{
+			ie.printStackTrace();
+		}
+		
+		Window.addToTextPane("Some Text.");
 	}
 }
