@@ -4,22 +4,22 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.ScrollPane;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
-import javax.swing.JTextPane;
+import javax.swing.text.DefaultCaret;
 
 public class Window
 {
 	private static Window instance;
 	
-	private static ScrollPane scrollPane;
+	private static JScrollPane scrollPane;
 	
-	private static JTextPane textPane;
+	private static JTextArea textPane;
 	
 	private static JFrame baseFrame;
 	
@@ -45,9 +45,10 @@ public class Window
 		
 		Container content = baseFrame.getContentPane();
 		
-		textPane = new JTextPane();
-		scrollPane = new ScrollPane(ScrollPane.SCROLLBARS_AS_NEEDED);
+		textPane = new JTextArea();
+		scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.add(textPane);
+		scrollPane.setViewportView(textPane);
 		textPane.setEditable(false);
 		textPane.setText("\n\n\n\n\n");
 		
@@ -56,14 +57,16 @@ public class Window
 		textPaneMax.width = 275;
 		
 		scrollPane.setMaximumSize(textPaneMax);
+		textPane.setMaximumSize(textPaneMax);
 		
 		Dimension textPaneMin = new Dimension();
 		textPaneMin.height = 100;
 		textPaneMin.width = 100;
+		textPane.setMinimumSize(textPaneMin);
+		scrollPane.setPreferredSize(textPaneMin);
 		scrollPane.setMinimumSize(textPaneMin);
-		
-		scrollPane.
-		
+		scrollPane.setSize(textPaneMin);
+		scrollPane.setAutoscrolls(true);
 		
 		content.add(scrollPane, c);
 		
@@ -122,10 +125,8 @@ public class Window
 	
 	public static void addToTextPane(String textToAdd)
 	{
-		if (textToAdd.endsWith("\n"))
-		{
-			textToAdd.replace("\n", "");
-		}
+		if (textToAdd.contains("\n"))
+				textToAdd = textToAdd.split("\n")[1];
 		
 		String temp;
 		if (textPane.getText().startsWith("\n"))
@@ -137,6 +138,10 @@ public class Window
 			temp = textPane.getText();
 		}
 		textPane.setText(temp + "\n" + textToAdd);
+
+		textPane.setCaretPosition(textPane.getDocument().getLength());
+		DefaultCaret caret = (DefaultCaret) textPane.getCaret();
+		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
 		
 		System.out.println("Current Text: " + textPane.getText());
 	}
