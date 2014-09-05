@@ -61,7 +61,7 @@ public class Window
 		
 		Dimension textPaneMin = new Dimension();
 		textPaneMin.height = 100;
-		textPaneMin.width = 100;
+		textPaneMin.width = 300;
 		textPane.setMinimumSize(textPaneMin);
 		scrollPane.setPreferredSize(textPaneMin);
 		scrollPane.setMinimumSize(textPaneMin);
@@ -82,11 +82,12 @@ public class Window
 		c.gridy = 4;
 		c.anchor = GridBagConstraints.PAGE_END;
 		
-		final JTextArea textBox = new JTextArea("0,0");
+		final JTextArea textBox = new JTextArea(1, 3);
 		
 		Dimension textBoxDimen = new Dimension();
 		textBoxDimen.width = 250;
-		textBox.setMinimumSize(textBoxDimen);
+		textBox.setPreferredSize(textBoxDimen);
+		
 		textBox.addKeyListener(new KeyListener(){
 
 			@Override
@@ -113,9 +114,10 @@ public class Window
 			
 		});
 		content.add(textBox, c);
+			
 		
-		
-		baseFrame.setLocationRelativeTo(null);		
+		baseFrame.setLocationRelativeTo(null);
+		baseFrame.pack();
 	}
 	
 	public static Window getInstance()
