@@ -13,4 +13,9 @@ public class Data
 	{
 		return data;
 	}
+	
+	public void setData(String s)
+	{
+		data = s.getBytes();
+	}
 }
