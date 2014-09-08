@@ -15,7 +15,7 @@ public class ExitCommand extends Command
 	public Data execute(Data data)
 	{
 		
-		data.setData("[EXITCOMMAND]" + data.getData().toString());
+		data.setData("[EXITCOMMAND]" + data.toString());
 		
 		Connection.disconnect();
 		

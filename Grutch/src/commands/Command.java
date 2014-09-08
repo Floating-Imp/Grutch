@@ -1,7 +1,5 @@
 package commands;
 
-import java.net.DatagramPacket;
-
 import connection.Data;
 
 public abstract class Command

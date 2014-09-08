@@ -13,6 +13,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.text.DefaultCaret;
 
+import commands.Command;
+import commands.Commands;
+import connection.Data;
+
 public class Window
 {
 	private static Window instance;
@@ -94,8 +98,17 @@ public class Window
 			public void keyPressed(KeyEvent e)
 			{
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-				{
-					Window.addToTextPane(textBox.getText());
+				{					
+					Data data = new Data(textBox.getText());
+					for (Commands c : Commands.values())
+					{
+						if (data.toString().startsWith(Command.getCommandChar() + "" + c.getValue().getCommandText()))
+						{							
+							data = c.getValue().execute(data);
+						}
+					}
+					
+					Window.addToTextPane(data.toString());
 					textBox.setText("");
 					textBox.setCaretPosition(0);
 				}
@@ -127,8 +140,11 @@ public class Window
 	
 	public static void addToTextPane(String textToAdd)
 	{
-		if (textToAdd.contains("\n"))
-				textToAdd = textToAdd.split("\n")[1];
+		if (textToAdd.startsWith("\n"))
+			textToAdd = textToAdd.split("\n")[1];
+		
+		if (textToAdd.endsWith("\n"))
+			textToAdd = textToAdd.split("\n")[0];
 		
 		String temp;
 		if (textPane.getText().startsWith("\n"))
@@ -139,11 +155,14 @@ public class Window
 		{
 			temp = textPane.getText();
 		}
+	
+		
 		textPane.setText(temp + "\n" + textToAdd);
 
 		textPane.setCaretPosition(textPane.getDocument().getLength());
 		DefaultCaret caret = (DefaultCaret) textPane.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
+
 		
 		System.out.println("Current Text: " + textPane.getText());
 	}

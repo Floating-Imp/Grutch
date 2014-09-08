@@ -13,9 +13,9 @@ public class MeCommand extends Command
 	@Override
 	public Data execute(Data data)
 	{
-		data.setData(data.getData().toString().replace(super.getCommandChar() + this.getCommandText(), ""));
+		data.setData(data.toString().replace(super.getCommandChar() + this.getCommandText(), ""));
 		
-		data.setData("[MECOMMAND]" + data.getData().toString());
+		data.setData("[MECOMMAND]" + data.toString());
 		
 		return data;
 	}

@@ -38,13 +38,6 @@ public class Connection
 	
 	public static void sendData(Data data) throws IOException
 	{
-		for (Commands c : Commands.values())
-		{
-			if (data.getData().toString().startsWith(Command.getCommandChar() + "" + c.getValue()))
-			{
-				c.getValue().execute(data);
-			}
-		}
 		
 		DatagramPacket datagram = new DatagramPacket(data.getData(), data.getData().length, SEND_TO_IP, port);
 		
@@ -53,6 +46,7 @@ public class Connection
 	
 	public static void disconnect()
 	{
-		socket.disconnect();
+		if (socket.isConnected())
+			socket.disconnect();
 	}
 }
