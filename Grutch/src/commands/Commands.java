@@ -3,7 +3,8 @@ package commands;
 public enum Commands
 {
 	me (new MeCommand()),
-	exit (new ExitCommand());
+	exit (new ExitCommand()),
+	color (new ColorCommand());
 	
 	private Command command;
 	

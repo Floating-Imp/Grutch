@@ -1,5 +1,6 @@
 package ui;
 
+import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
@@ -7,11 +8,16 @@ import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 
+import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
+import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyledDocument;
 
 import commands.Command;
 import commands.Commands;
@@ -23,9 +29,15 @@ public class Window
 	
 	private static JScrollPane scrollPane;
 	
-	private static JTextArea textPane;
+	private static JTextPane textPane;
+	
+	private static StyledDocument doc;
 	
 	private static JFrame baseFrame;
+	
+	private static Color textColor;
+	
+	private static SimpleAttributeSet attributes;
 	
 	static
 	{
@@ -49,7 +61,14 @@ public class Window
 		
 		Container content = baseFrame.getContentPane();
 		
-		textPane = new JTextArea();
+		textPane = new JTextPane();
+		textColor = Color.white;
+		textPane.setForeground(textColor);
+		textPane.setBackground(Color.black);
+		
+		doc = textPane.getStyledDocument();
+		
+		
 		scrollPane = new JScrollPane(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED, JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
 		scrollPane.add(textPane);
 		scrollPane.setViewportView(textPane);
@@ -98,8 +117,15 @@ public class Window
 			public void keyPressed(KeyEvent e)
 			{
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
-				{					
+				{
 					Data data = new Data(textBox.getText());
+
+					if (data.toString().startsWith("\n"))
+						data.setData(data.toString().split("\n")[1]);
+					
+					if (data.toString().endsWith("\n"))
+						data.setData(data.toString().split("\n")[0]);
+					
 					for (Commands c : Commands.values())
 					{
 						if (data.toString().startsWith(Command.getCommandChar() + "" + c.getValue().getCommandText()))
@@ -108,7 +134,11 @@ public class Window
 						}
 					}
 					
-					Window.addToTextPane(data.toString());
+					if (data != null)
+					{
+						Window.addToTextPane(data.toString());
+					}
+					
 					textBox.setText("");
 					textBox.setCaretPosition(0);
 				}
@@ -139,13 +169,7 @@ public class Window
 	}
 	
 	public static void addToTextPane(String textToAdd)
-	{
-		if (textToAdd.startsWith("\n"))
-			textToAdd = textToAdd.split("\n")[1];
-		
-		if (textToAdd.endsWith("\n"))
-			textToAdd = textToAdd.split("\n")[0];
-		
+	{		
 		String temp;
 		if (textPane.getText().startsWith("\n"))
 		{
@@ -156,8 +180,16 @@ public class Window
 			temp = textPane.getText();
 		}
 	
-		
-		textPane.setText(temp + "\n" + textToAdd);
+		try
+		{
+			doc.insertString(doc.getLength(), "\n" + textToAdd, attributes);
+		}
+		catch (BadLocationException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+//		textPane.setText(temp + "\n" + textToAdd);
 
 		textPane.setCaretPosition(textPane.getDocument().getLength());
 		DefaultCaret caret = (DefaultCaret) textPane.getCaret();
@@ -170,5 +202,10 @@ public class Window
 	public static void show()
 	{
 		baseFrame.setVisible(true);
+	}
+	
+	public static void addStyleConstant(SimpleAttributeSet sas)
+	{
+		attributes = sas;
 	}
 }
