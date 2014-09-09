@@ -5,15 +5,20 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
+import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.io.IOException;
 
+import javax.swing.AbstractAction;
+import javax.swing.Action;
 import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 import javax.swing.JTextPane;
+import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.SimpleAttributeSet;
@@ -21,10 +26,13 @@ import javax.swing.text.StyledDocument;
 
 import commands.Command;
 import commands.Commands;
+import connection.Connection;
 import connection.Data;
 
 public class Window
 {
+	private static String userName;
+	
 	private static Window instance;
 	
 	private static JScrollPane scrollPane;
@@ -111,6 +119,26 @@ public class Window
 		textBoxDimen.width = 250;
 		textBox.setPreferredSize(textBoxDimen);
 		
+		 Action moveToSelectionStart = new AbstractAction("moveCaret") {
+
+		        @Override
+		        public void actionPerformed(ActionEvent e) {
+		            int selectionStart = textBox.getSelectionStart();
+		            int selectionEnd = textBox.getSelectionEnd();
+		            if (selectionStart != selectionEnd) {
+		                textBox.setCaretPosition(selectionEnd);
+		                textBox.moveCaretPosition(selectionStart);
+		            }
+		        }
+
+		        public boolean isEnabled() {
+		            return textBox.getSelectedText() != null;
+		        }
+		    };
+		    Object actionMapKey = "caret-to-start";
+		    textBox.getInputMap().put(KeyStroke.getKeyStroke("ENTER"), actionMapKey);
+		    textBox.getActionMap().put(actionMapKey, moveToSelectionStart);
+		
 		textBox.addKeyListener(new KeyListener(){
 
 			@Override
@@ -120,6 +148,11 @@ public class Window
 				{
 					Data data = new Data(textBox.getText());
 
+					if (data.toString().equals("\n"))
+					{
+						return;
+					}
+					
 					if (data.toString().startsWith("\n"))
 						data.setData(data.toString().split("\n")[1]);
 					
@@ -137,10 +170,17 @@ public class Window
 					if (data != null)
 					{
 						Window.addToTextPane(data.toString());
+						try
+						{
+							Connection.sendData(data);
+						}
+						catch (IOException e1)
+						{
+							e1.printStackTrace();
+						}
 					}
-					
+
 					textBox.setText("");
-					textBox.setCaretPosition(0);
 				}
 			}
 
@@ -189,7 +229,6 @@ public class Window
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-//		textPane.setText(temp + "\n" + textToAdd);
 
 		textPane.setCaretPosition(textPane.getDocument().getLength());
 		DefaultCaret caret = (DefaultCaret) textPane.getCaret();
@@ -207,5 +246,10 @@ public class Window
 	public static void addStyleConstant(SimpleAttributeSet sas)
 	{
 		attributes = sas;
+	}
+	
+	static void setUserName(String userName)
+	{
+		Window.userName = userName;
 	}
 }

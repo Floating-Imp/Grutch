@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketException;
 import java.net.UnknownHostException;
 
 import commands.Command;
@@ -18,6 +19,15 @@ public class Connection
 	
 	static
 	{
+		try
+		{
+			socket = new DatagramSocket(1002);
+		}
+		catch (SocketException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		port = 1001;
 		
 		try	
