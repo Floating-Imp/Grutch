@@ -7,9 +7,6 @@ import java.net.InetAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import commands.Command;
-import commands.Commands;
-
 public class Connection
 {
 	private static DatagramSocket socket;
@@ -19,6 +16,8 @@ public class Connection
 	
 	static
 	{
+		
+		
 		try
 		{
 			socket = new DatagramSocket(1002);
@@ -48,7 +47,6 @@ public class Connection
 	
 	public static void sendData(Data data) throws IOException
 	{
-		
 		DatagramPacket datagram = new DatagramPacket(data.getData(), data.getData().length, SEND_TO_IP, port);
 		
 		socket.send(datagram);

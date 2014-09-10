@@ -30,8 +30,7 @@ public class ColorCommand extends Command
 		{
 			try
 			{
-				Field f = Color.class.getField(strings[1]);
-				color = (Color)f.get(null);
+				color = stringToColor(strings[1]);
 				SimpleAttributeSet sas = new SimpleAttributeSet();
 				StyleConstants.setForeground(sas, color);
 				
@@ -56,6 +55,12 @@ public class ColorCommand extends Command
 		}
 		
 		return null;
+	}
+	
+	public static Color stringToColor(String string) throws NoSuchFieldException, SecurityException, IllegalArgumentException, IllegalAccessException
+	{
+		Field f = Color.class.getField(string);
+		return (Color)f.get(null);
 	}
 
 }

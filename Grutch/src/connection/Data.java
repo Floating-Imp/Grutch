@@ -1,29 +1,58 @@
 package connection;
 
+import java.awt.Color;
+
 public class Data
 {
-	private byte[] data;
 	private String text;
+	private String username;
+	private Color color;
 	
-	public Data(String info)
+	public Data(String info, String username, Color c)
 	{
 		this.text = info;
-		this.data = info.getBytes();
 	}
 	
 	public byte[] getData()
 	{
-		return data;
+		return (username + "|" + text + "|" + color.toString()).getBytes();
 	}
 	
-	public void setData(String s)
+	public void setData(String info, String username, Color c)
 	{
-		this.text = s;
-		data = s.getBytes();
+		this.text = info;
+		this.username = username;
+		this.color = c;
+	}
+	
+	public void setData(String info, String username)
+	{
+		this.text = info;
+		this.username = username;
+	}
+	
+	public void setData(String info)
+	{
+		this.text = info;
+	}
+	
+	public void setUsername(String username)
+	{
+		this.username = username;
+	}
+	
+	public void setColor(Color c)
+	{
+		this.color = c;
+	}
+	
+	public Color getColor()
+	{
+		return color;
 	}
 	
 	public String toString()
 	{
-		return this.text;
+		return "[" + this.username + "]:" + this.text;
 	}
 }

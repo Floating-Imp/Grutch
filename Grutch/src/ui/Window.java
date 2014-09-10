@@ -12,7 +12,6 @@ import java.io.IOException;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
-import javax.swing.JEditorPane;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JScrollPane;
@@ -22,6 +21,7 @@ import javax.swing.KeyStroke;
 import javax.swing.text.BadLocationException;
 import javax.swing.text.DefaultCaret;
 import javax.swing.text.SimpleAttributeSet;
+import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
 import commands.Command;
@@ -31,7 +31,7 @@ import connection.Data;
 
 public class Window
 {
-	private static String userName;
+	private static String username;
 	
 	private static Window instance;
 	
@@ -42,8 +42,6 @@ public class Window
 	private static StyledDocument doc;
 	
 	private static JFrame baseFrame;
-	
-	private static Color textColor;
 	
 	private static SimpleAttributeSet attributes;
 	
@@ -70,8 +68,7 @@ public class Window
 		Container content = baseFrame.getContentPane();
 		
 		textPane = new JTextPane();
-		textColor = Color.white;
-		textPane.setForeground(textColor);
+		textPane.setForeground(Color.white);
 		textPane.setBackground(Color.black);
 		
 		doc = textPane.getStyledDocument();
@@ -119,7 +116,8 @@ public class Window
 		textBoxDimen.width = 250;
 		textBox.setPreferredSize(textBoxDimen);
 		
-		 Action moveToSelectionStart = new AbstractAction("moveCaret") {
+		 @SuppressWarnings("serial")
+		Action moveToSelectionStart = new AbstractAction("moveCaret") {
 
 		        @Override
 		        public void actionPerformed(ActionEvent e) {
@@ -146,7 +144,7 @@ public class Window
 			{
 				if (e.getKeyCode() == KeyEvent.VK_ENTER)
 				{
-					Data data = new Data(textBox.getText());
+					Data data = new Data(textBox.getText(), username, StyleConstants.getForeground(attributes));
 
 					if (data.toString().equals("\n"))
 					{
@@ -210,15 +208,15 @@ public class Window
 	
 	public static void addToTextPane(String textToAdd)
 	{		
-		String temp;
-		if (textPane.getText().startsWith("\n"))
-		{
-			temp = textPane.getText().replaceFirst("\n", "");
-		}
-		else
-		{
-			temp = textPane.getText();
-		}
+//		String temp;
+//		if (textPane.getText().startsWith("\n"))
+//		{
+//			temp = textPane.getText().replaceFirst("\n", "");
+//		}
+//		else
+//		{
+//			temp = textPane.getText();
+//		}
 	
 		try
 		{
@@ -226,7 +224,6 @@ public class Window
 		}
 		catch (BadLocationException e)
 		{
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 
@@ -238,8 +235,9 @@ public class Window
 		System.out.println("Current Text: " + textPane.getText());
 	}
 	
-	public static void show()
+	public static void show(String username)
 	{
+		Window.username = username;
 		baseFrame.setVisible(true);
 	}
 	
@@ -248,8 +246,8 @@ public class Window
 		attributes = sas;
 	}
 	
-	static void setUserName(String userName)
+	public static SimpleAttributeSet getAttributes()
 	{
-		Window.userName = userName;
+		return attributes;
 	}
 }
