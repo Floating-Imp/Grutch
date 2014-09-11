@@ -8,7 +8,8 @@ import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
-import java.io.IOException;
+import java.awt.event.WindowEvent;
+import java.awt.event.WindowListener;
 
 import javax.swing.AbstractAction;
 import javax.swing.Action;
@@ -58,6 +59,44 @@ public class Window
 		
 		baseFrame.setSize(200, 300);
 		baseFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+		baseFrame.addWindowListener(new WindowListener(){
+
+			@Override
+			public void windowActivated(WindowEvent arg0)
+			{
+			}
+
+			@Override
+			public void windowClosed(WindowEvent arg0)
+			{
+			}
+
+			@Override
+			public void windowClosing(WindowEvent arg0)
+			{
+				Receiver.stop();
+			}
+
+			@Override
+			public void windowDeactivated(WindowEvent arg0)
+			{
+			}
+
+			@Override
+			public void windowDeiconified(WindowEvent arg0)
+			{
+			}
+
+			@Override
+			public void windowIconified(WindowEvent arg0)
+			{
+			}
+
+			@Override
+			public void windowOpened(WindowEvent arg0)
+			{
+			}
+		});
 		
 		GridBagConstraints c = new GridBagConstraints();
 		c.gridx = 0;
@@ -172,14 +211,7 @@ public class Window
 					if (data != null)
 					{
 						Window.addToTextPane(data.toString());
-						try
-						{
-							Connection.sendData(data);
-						}
-						catch (IOException e1)
-						{
-							e1.printStackTrace();
-						}
+						Connection.sendData(data);
 					}
 
 					textBox.setText("");
@@ -259,6 +291,5 @@ public class Window
 	{
 		baseFrame.setVisible(false);
 		baseFrame.dispose();
-		Receiver.stop();
 	}
 }

@@ -17,6 +17,8 @@ public class NameEnterWindow
 	private NameEnterWindow()
 	{
 		final JFrame nameFrame = new JFrame();
+		
+		nameFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	
 		nameFrame.setLocationRelativeTo(null);
 		

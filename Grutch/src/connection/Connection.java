@@ -24,9 +24,17 @@ public class Connection
 		}
 		catch (SocketException e)
 		{
-			// TODO Auto-generated catch block
+			try
+			{
+				socket = new DatagramSocket(1003);
+			}
+			catch (SocketException ex)
+			{
+				ex.printStackTrace();
+			}
 			e.printStackTrace();
 		}
+		
 		port = 1001;
 		
 		try	
@@ -45,11 +53,18 @@ public class Connection
 		
 	}
 	
-	public static void sendData(Data data) throws IOException
+	public static void sendData(Data data)
 	{
 		DatagramPacket datagram = new DatagramPacket(data.getData(), data.getData().length, SEND_TO_IP, port);
 		
-		socket.send(datagram);
+		try
+		{
+			socket.send(datagram);
+		}
+		catch (IOException ioe)
+		{
+			ioe.printStackTrace();
+		}
 	}
 	
 	public static void disconnect()
