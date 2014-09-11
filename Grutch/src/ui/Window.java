@@ -28,6 +28,7 @@ import commands.Command;
 import commands.Commands;
 import connection.Connection;
 import connection.Data;
+import connection.Receiver;
 
 public class Window
 {
@@ -69,6 +70,9 @@ public class Window
 		
 		textPane = new JTextPane();
 		textPane.setForeground(Color.white);
+		attributes = new SimpleAttributeSet();
+		
+		StyleConstants.setForeground(attributes, Color.WHITE);
 		textPane.setBackground(Color.black);
 		
 		doc = textPane.getStyledDocument();
@@ -159,7 +163,7 @@ public class Window
 					
 					for (Commands c : Commands.values())
 					{
-						if (data.toString().startsWith(Command.getCommandChar() + "" + c.getValue().getCommandText()))
+						if (data.getText().startsWith(Command.getCommandChar() + "" + c.getValue().getCommandText()))
 						{							
 							data = c.getValue().execute(data);
 						}
@@ -249,5 +253,12 @@ public class Window
 	public static SimpleAttributeSet getAttributes()
 	{
 		return attributes;
+	}
+	
+	public static void closing()
+	{
+		baseFrame.setVisible(false);
+		baseFrame.dispose();
+		Receiver.stop();
 	}
 }

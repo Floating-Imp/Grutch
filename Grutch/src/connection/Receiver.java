@@ -8,15 +8,18 @@ public class Receiver implements Runnable
 {
 	private DatagramSocket socket;
 	
+	private static boolean running;
+	
 	public Receiver(DatagramSocket socket)
 	{
 		this.socket = socket;
+		running = true;
 	}
 	
 	@Override
 	public void run()
 	{
-		while(true)
+		while(running)
 		{
 			DatagramPacket temp = new DatagramPacket("".getBytes(), 0);
 			try
@@ -30,5 +33,10 @@ public class Receiver implements Runnable
 			
 			new Thread(new Processing(temp)).start();
 		}
+	}
+	
+	public static void stop()
+	{
+		running = false;
 	}
 }

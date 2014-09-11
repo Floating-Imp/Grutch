@@ -21,7 +21,7 @@ public class ColorCommand extends Command
 	@Override
 	public Data execute(Data data)
 	{
-		String[] strings = data.toString().split(" ");
+		String[] strings = data.getText().split(" ");
 		Color color = Color.black;
 		
 		

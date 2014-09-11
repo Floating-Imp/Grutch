@@ -8,9 +8,14 @@ public class Data
 	private String username;
 	private Color color;
 	
+	private boolean isStandard;
+	
 	public Data(String info, String username, Color c)
 	{
 		this.text = info;
+		this.username = username;
+		this.color = c;
+		isStandard = true;
 	}
 	
 	public byte[] getData()
@@ -53,6 +58,27 @@ public class Data
 	
 	public String toString()
 	{
-		return "[" + this.username + "]:" + this.text;
+		if (isStandard)
+		{
+			return "[" + username + "]: " + this.text;
+		}
+		
+		return this.text;
+	}
+	
+	public String getText()
+	{
+		return this.text;
+	}
+	
+	public String getUsername()
+	{
+		return this.username;
+	}
+	
+	public void setOutput(String s)
+	{
+		this.isStandard = false;
+		this.text = s;
 	}
 }

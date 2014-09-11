@@ -1,6 +1,6 @@
 package commands;
 
-import connection.Connection;
+import ui.Window;
 import connection.Data;
 
 public class ExitCommand extends Command
@@ -15,9 +15,9 @@ public class ExitCommand extends Command
 	public Data execute(Data data)
 	{
 		
-		data.setData("[EXITCOMMAND]" + data.toString());
+		data.setOutput(data.getUsername() + " has left.");
 		
-		Connection.disconnect();
+		Window.closing();
 		
 		return data;
 	}

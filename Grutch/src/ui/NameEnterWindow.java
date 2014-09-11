@@ -1,6 +1,7 @@
 package ui;
 
 import java.awt.Container;
+import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 import java.awt.event.KeyEvent;
@@ -15,7 +16,9 @@ public class NameEnterWindow
 	
 	private NameEnterWindow()
 	{
-		JFrame nameFrame = new JFrame();
+		final JFrame nameFrame = new JFrame();
+	
+		nameFrame.setLocationRelativeTo(null);
 		
 		nameFrame.setTitle("Enter username");
 		
@@ -25,14 +28,24 @@ public class NameEnterWindow
 		
 		final JTextField textField = new JTextField();
 		
+		Dimension textFieldDimens = new Dimension();
+		
+		textFieldDimens.height = 100;
+		textFieldDimens.width = 300;
+		
+		textField.setPreferredSize(textFieldDimens);
+		
 		textField.addKeyListener(new KeyListener(){
 
 			@Override
 			public void keyPressed(KeyEvent arg0)
 			{
-				if (arg0.equals(KeyEvent.VK_ENTER))
+				if (arg0.getKeyCode() == (KeyEvent.VK_ENTER))
 				{
 					username = textField.getText().replace("\n", "");
+					
+					nameFrame.setVisible(false);
+					nameFrame.dispose();
 				}
 			}
 
@@ -55,6 +68,7 @@ public class NameEnterWindow
 		
 		content.add(textField, c);
 		
+		nameFrame.pack();
 		nameFrame.setVisible(true);
 	}
 	
