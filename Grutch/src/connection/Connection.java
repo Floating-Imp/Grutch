@@ -15,23 +15,30 @@ public class Connection
 	
 	
 	static
-	{
-		
-		
+	{		
 		try
 		{
-			socket = new DatagramSocket(1002);
+			socket = new DatagramSocket(0);
+		}
+		catch (java.net.BindException e)
+		{
+//			try
+//			{
+//				socket = new DatagramSocket(1003);
+//			}
+//			catch (java.net.BindException ex)
+//			{
+//				ex.printStackTrace();
+//			}
+//			catch (SocketException e1)
+//			{
+//				// TODO Auto-generated catch block
+//				e1.printStackTrace();
+//			}
+			e.printStackTrace();
 		}
 		catch (SocketException e)
 		{
-			try
-			{
-				socket = new DatagramSocket(1003);
-			}
-			catch (SocketException ex)
-			{
-				ex.printStackTrace();
-			}
 			e.printStackTrace();
 		}
 		
@@ -45,12 +52,29 @@ public class Connection
 		{
 			
 		}
-	}
-	
-	public Connection()
-	{
+		
+
 		socket.connect(SEND_TO_IP, port);
 		
+		try
+		{
+			new Thread(new Receiver(new DatagramSocket(socket.getPort() + 1))).start();
+		}
+		catch (SocketException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		try
+		{
+			Thread.sleep(100);
+		}
+		catch (InterruptedException e)
+		{
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	public static void sendData(Data data)

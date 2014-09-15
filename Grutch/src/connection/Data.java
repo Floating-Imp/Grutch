@@ -20,7 +20,7 @@ public class Data
 	
 	public byte[] getData()
 	{
-		return (username + "|" + text + "|" + color.toString()).getBytes();
+		return (username + "|" + text + "|" + color.getRed() + "," + color.getGreen() + "," + color.getBlue()).getBytes();
 	}
 	
 	public void setData(String info, String username, Color c)

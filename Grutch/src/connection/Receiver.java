@@ -21,10 +21,11 @@ public class Receiver implements Runnable
 	{
 		while(running)
 		{
-			DatagramPacket temp = new DatagramPacket("".getBytes(), 0);
+			DatagramPacket temp = new DatagramPacket(new byte[2048], 2048);
 			try
 			{
 				socket.receive(temp);
+				System.out.println("RECIEVED SOMETHING!!!");
 			}
 			catch (IOException e)
 			{

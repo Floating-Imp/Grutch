@@ -202,16 +202,21 @@ public class Window
 					
 					for (Commands c : Commands.values())
 					{
-						if (data.getText().startsWith(Command.getCommandChar() + "" + c.getValue().getCommandText()))
-						{							
-							data = c.getValue().execute(data);
+						if (c.equals(Commands.color))
+						{
+							if (data.getText().startsWith(Command.getCommandChar() + "" + c.getValue().getCommandText()))
+							{							
+								data = c.getValue().execute(data);
+							}
 						}
 					}
 					
+					
 					if (data != null)
 					{
-						Window.addToTextPane(data.toString());
 						Connection.sendData(data);
+						
+						Window.addToTextPane(data);
 					}
 
 					textBox.setText("");
@@ -242,21 +247,20 @@ public class Window
 		return instance;
 	}
 	
-	public static void addToTextPane(String textToAdd)
+	public static void addToTextPane(Data data)
 	{		
-//		String temp;
-//		if (textPane.getText().startsWith("\n"))
-//		{
-//			temp = textPane.getText().replaceFirst("\n", "");
-//		}
-//		else
-//		{
-//			temp = textPane.getText();
-//		}
+		
+		for (Commands c : Commands.values())
+		{
+			if (data.getText().startsWith(Command.getCommandChar() + "" + c.getValue().getCommandText()))
+			{							
+				data = c.getValue().execute(data);
+			}
+		}
 	
 		try
 		{
-			doc.insertString(doc.getLength(), "\n" + textToAdd, attributes);
+			doc.insertString(doc.getLength(), "\n" + data.toString(), attributes);
 		}
 		catch (BadLocationException e)
 		{
