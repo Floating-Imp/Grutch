@@ -13,9 +13,13 @@ public class Data
 	public Data(String info, String username, Color c)
 	{
 		this.text = info;
+		isStandard = true;
+		if (username.equals(""))
+		{
+			this.isStandard = false;
+		}
 		this.username = username;
 		this.color = c;
-		isStandard = true;
 	}
 	
 	public byte[] getData()

@@ -25,8 +25,6 @@ import javax.swing.text.SimpleAttributeSet;
 import javax.swing.text.StyleConstants;
 import javax.swing.text.StyledDocument;
 
-import commands.Command;
-import commands.Commands;
 import connection.Connection;
 import connection.Data;
 import connection.Receiver;
@@ -200,23 +198,10 @@ public class Window
 					if (data.toString().endsWith("\n"))
 						data.setData(data.toString().split("\n")[0]);
 					
-					for (Commands c : Commands.values())
-					{
-						if (c.equals(Commands.color))
-						{
-							if (data.getText().startsWith(Command.getCommandChar() + "" + c.getValue().getCommandText()))
-							{							
-								data = c.getValue().execute(data);
-							}
-						}
-					}
-					
 					
 					if (data != null)
 					{
 						Connection.sendData(data);
-						
-						Window.addToTextPane(data);
 					}
 
 					textBox.setText("");
@@ -248,16 +233,7 @@ public class Window
 	}
 	
 	public static void addToTextPane(Data data)
-	{		
-		
-		for (Commands c : Commands.values())
-		{
-			if (data.getText().startsWith(Command.getCommandChar() + "" + c.getValue().getCommandText()))
-			{							
-				data = c.getValue().execute(data);
-			}
-		}
-	
+	{	
 		try
 		{
 			doc.insertString(doc.getLength(), "\n" + data.toString(), attributes);
@@ -270,9 +246,6 @@ public class Window
 		textPane.setCaretPosition(textPane.getDocument().getLength());
 		DefaultCaret caret = (DefaultCaret) textPane.getCaret();
 		caret.setUpdatePolicy(DefaultCaret.NEVER_UPDATE);
-
-		
-		System.out.println("Current Text: " + textPane.getText());
 	}
 	
 	public static void show(String username)

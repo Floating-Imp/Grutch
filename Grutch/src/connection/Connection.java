@@ -13,8 +13,9 @@ public class Connection
 	private static InetAddress SEND_TO_IP;
 	public static int port;
 	
+	private static Connection instance;
 	
-	static
+	private Connection(String ip) throws UnknownHostException
 	{		
 		try
 		{
@@ -44,21 +45,17 @@ public class Connection
 		
 		port = 1001;
 		
-		try	
-		{
-			SEND_TO_IP = InetAddress.getByName("10.135.213.136");
-		}
-		catch (UnknownHostException uhe)
-		{
-			
-		}
-		
+		SEND_TO_IP = InetAddress.getByName(ip);
 
 		socket.connect(SEND_TO_IP, port);
 		
 		try
 		{
-			new Thread(new Receiver(new DatagramSocket(socket.getPort() + 1))).start();
+			DatagramSocket receiver = new DatagramSocket(socket.getLocalPort() + 1);
+			
+			System.out.println("Receiver set to port: " + receiver.getLocalPort());
+			
+			new Thread(new Receiver(receiver)).start();
 		}
 		catch (SocketException e)
 		{
@@ -74,6 +71,14 @@ public class Connection
 		{
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
+	}
+	
+	public static void instantiate(String SEND_TO_IP) throws UnknownHostException
+	{
+		if (instance == null)
+		{
+			instance = new Connection(SEND_TO_IP);
 		}
 	}
 	

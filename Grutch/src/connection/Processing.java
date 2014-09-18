@@ -21,10 +21,11 @@ public class Processing implements Runnable
 	@Override
 	public void run()
 	{
-		String temp = "";
+		String rawData = null;
+		
 		try
 		{
-			temp = new String(packet.getData(), "UTF-8");
+			rawData = new String(packet.getData(), "UTF-8");
 		}
 		catch (UnsupportedEncodingException e1)
 		{
@@ -34,9 +35,15 @@ public class Processing implements Runnable
 		
 		try
 		{
-			String colorRGB = temp.split("\\|")[2];
+			rawData = rawData.trim();
 			
-			Data data = new Data(temp.split("\\|")[1], temp.split("\\|")[0], new Color(Integer.parseInt(colorRGB.split(",")[0]), Integer.parseInt(colorRGB.split(",")[1]), Integer.parseInt(colorRGB.split(",")[2])));
+			String colorRGB = rawData.split("\\|")[2];
+			
+			int red = Integer.parseInt(colorRGB.split(",")[0]);
+			int green = Integer.parseInt(colorRGB.split(",")[1]);
+			int blue = Integer.parseInt(colorRGB.split(",")[2]);
+			
+			Data data = new Data(rawData.split("\\|")[1], rawData.split("\\|")[0], new Color(red, green, blue));
 			
 			SimpleAttributeSet previousSAS = Window.getAttributes();
 			
